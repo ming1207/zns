@@ -1,0 +1,12 @@
+echarts百度图表   各种图表
+d3js  用这个库来完成图表
+
+拖拽轮播
+加6 1 
+transition改下
+transitionend判断  
+
+一个手指转：
+双指旋转                  
+
+

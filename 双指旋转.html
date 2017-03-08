@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		#box{
+			width: 200px;
+			height: 200px;
+			background-color: green;
+			margin: 100px auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		var oBox = document.querySelector('#box');
+		var angle = 0;
+
+		oBox.addEventListener('touchstart',function(
+			ev
+		){
+
+			ev.preventDefault();
+			var targetTouches = ev.targetTouches;
+
+			if( targetTouches.length == 2 ){
+
+				var startAngle = getAngle(ev)
+				var oldAngle = angle;
+
+				document.addEventListener('touchmove',function(
+						ev
+					){
+					var currentAngle = getAngle(ev);
+
+					var deltaAngle = startAngle - currentAngle;
+
+					oBox.style.transform = `rotate(${deltaAngle + oldAngle}rad)`;
+
+					angle = deltaAngle + oldAngle;
+
+				},false)
+			}
+		},false)		
+
+		function getAngle(ev){
+			var oneTouch = ev.targetTouches[0];
+			var twoTouch = ev.targetTouches[1];
+
+			return Math.atan2(
+				twoTouch.clientX - oneTouch.clientX,
+				twoTouch.clientY - oneTouch.clientY
+			);
+		}
+	</script>
+</body>
+</html>

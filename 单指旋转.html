@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		#box{
+			width: 200px;
+			height: 200px;
+			background-color: green;
+			margin: 100px auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		var oBox = document.querySelector('#box');
+
+		var {
+			offsetLeft,
+			offsetWidth,
+			offsetHeight,
+			offsetTop
+		} = oBox;
+
+		var originX = offsetLeft + offsetWidth/2;
+		var originY = offsetTop + offsetHeight/2;
+
+		document.addEventListener('touchstart',function(
+			ev
+		){
+			ev.preventDefault();//aa  自己加上的
+			var startAngle = getAngle(ev) - (oBox.dataset.angle || 0);//aa oBox.dataset.angle转过的角，取存的这个值
+
+			document.addEventListener('touchmove',fnMove,false)
+			document.addEventListener('touchend',fnEnd,false)
+
+			function fnMove(ev){
+				var currentAngle = getAngle(ev);
+				var deltaAngle = currentAngle - startAngle;
+
+				oBox.style.transform = `rotate(${deltaAngle}rad)`//aa 为什么是弧度值？是因为getAngle的返回值是弧度吗
+				oBox.dataset.angle = deltaAngle; //aa存的值,存的变量，move了存个值
+			}
+
+			function fnEnd(){
+				document.removeEventListener('touchmove',fnMove,false)
+				document.removeEventListener('touchend',fnEnd,false)
+			}
+
+		},false)
+
+		function r2d(r){
+			return r/Math.PI*180     //aa弧度转角度，此处没有用上，做了解
+		}
+
+		function getAngle(ev){
+
+			var [{clientX,clientY}] = ev.targetTouches;
+
+			return Math.atan2(
+				clientY - originY,clientX - originX
+			);
+		}
+	</script>
+</body>
+</html>

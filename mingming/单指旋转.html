@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<title>Document</title>
+	<style>
+		body{
+			
+		}
+		div{
+			width: 200px;
+			height: 200px;
+			background: green;
+			margin: 100px auto;
+		
+			
+		}
+	</style>
+</head>
+<body>
+	<div class="box"></div>
+	<script type="text/javascript">
+
+		var oBox = document.querySelector('.box');
+		var {offsetLeft,offsetTop,offsetWidth,offsetHeight}=oBox; //aa
+		var originX=offsetLeft+offsetWidth/2;
+		var originY=offsetTop+offsetHeight/2;
+
+		document.addEventListener('touchstart',function(ev){
+			
+			var startAngle=getAngle(ev)-(oBox.dataset.angle||0);
+
+			document.addEventListener('touchmove',fnMove,false)
+			document.addEventListener('touchend',fnEnd,false)
+
+			
+			function fnMove(ev){
+				var currentAngle=getAngle(ev);
+				var deltaX=currentAngle-startAngle;
+
+				oBox.style.transform=`rotate(${deltaX}rad)`;
+				oBox.dataset.angle=deltaX;	
+			}
+
+
+			function fnEnd(ev){
+				document.removeEventListener('touchmove',fnMove,false)
+				document.removeEventListener('touchend',fnEnd,false)			
+			}
+
+		},false)
+
+		function getAngle(ev){
+			var [{clientX,clientY}]=ev.targetTouches;
+			return Math.atan2(clientY-originY,clientX-originX)  //aa 返回的是弧度值
+
+		}
+	</script>
+</body>
+</html>

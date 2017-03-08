@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		#box{
+			width: 200px;
+			height: 200px;
+			background-color: green;
+			margin: 100px auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		var oBox = document.querySelector('#box');
+		oBox.addEventListener('touchstart',function(
+			ev
+		){
+
+			ev.preventDefault();   //aa为什么单指没有写组织默认？应该有的
+			var targetTouches = ev.targetTouches;//aa targetTouches 手指触屏
+
+			if( targetTouches.length == 2 ){
+
+				var startAngle = getAngle(ev) - (oBox.dataset.angle || 0);
+
+				
+			}
+			document.addEventListener('touchmove',fnMove,false);
+
+			function fnMove(ev){
+				var currentAngle = getAngle(ev);
+
+				var deltaAngle = currentAngle - startAngle;
+
+				oBox.style.transform = `rotate(${-deltaAngle}rad)`;
+
+				oBox.dataset.angle = deltaAngle;	
+			}
+
+			function fnEnd(){
+				document.removeEventListener('touchmove', fnMove, false);
+				document.removeEventListener('touchend', fnEnd, false);			
+			}	
+		},false)	
+
+
+		function getAngle(ev){
+			var oneTouch = ev.targetTouches[0];
+			var twoTouch = ev.targetTouches[1];
+
+			return Math.atan2(
+				twoTouch.clientX - oneTouch.clientX,
+				twoTouch.clientY - oneTouch.clientY
+			);
+		}
+	</script>
+</body>
+</html>

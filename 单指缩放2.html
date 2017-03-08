@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		#box{
+			width: 200px;
+			height: 200px;
+			background-color: green;
+			margin: 100px auto;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		var oBox = document.querySelector('#box');
+
+		var {
+			offsetLeft,
+			offsetWidth,
+			offsetHeight,
+			offsetTop
+		} = oBox;
+
+		var scale = 1;
+
+		var originX = offsetLeft + offsetWidth/2;
+		var originY = offsetTop + offsetHeight/2;
+
+		document.addEventListener('touchstart',function(
+			ev
+		){
+			var startDis = getDis(ev)/(oBox.dataset.scale || 1);  //aa?????? 
+
+			document.addEventListener('touchmove',fnMove,false)
+			document.addEventListener('touchend',fnEnd,false)
+
+			function fnMove(ev){
+				var currentDis = getDis(ev);
+
+				scale = currentDis/startDis
+
+				oBox.style.transform = `scale(${scale})`;
+				oBox.dataset.scale = scale;
+			}
+
+			function fnEnd(){
+				document.removeEventListener('touchmove',fnMove,false)
+				document.removeEventListener('touchend',fnEnd,false)
+			}
+
+		},false)
+
+		function getDis(ev){
+
+			var [{clientX,clientY}] = ev.targetTouches;
+
+			return Math.sqrt(
+				Math.pow(clientX - originX,2) +
+				Math.pow(clientY - originY,2)
+			)
+		}
+	</script>
+</body>
+</html>

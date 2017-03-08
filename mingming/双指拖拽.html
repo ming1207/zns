@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+			position:relative;
+			width:320px;
+		}
+
+		.div1,.div2{
+			width:100px;
+			height: 100px;
+			position: absolute;
+			top:0;
+		}
+		.div1{
+			background:green;
+			left:0;
+		}
+		.div2{
+			background:red;
+			left:220px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="div1"></div>
+	<div class="div2"></div>
+	<script>
+
+
+
+		var oDiv1 = document.querySelector('.div1');
+		var oDiv2 = document.querySelector('.div2');
+
+	
+
+		// 拖拽
+		obj.addEventListener('touchstart',function(
+			ev
+		){
+			var [{clientX}] = ev.targetTouches;
+		
+			document.addEventListener('touchmove',fnMove,false)
+			document.addEventListener('touchend',fnEnd,false)
+
+			function fnMove(ev){
+				var [{clientX}] = ev.targetTouches;
+				var deltaX = clientX - disX;
+
+				oUl.style.left = deltaX + 'px';
+			}
+
+			function fnEnd(ev){
+				document.removeEventListener('touchmove',fnMove,false)
+				document.removeEventListener('touchend',fnEnd,false)
+
+				
+		},false)
+
+		
+	</script>
+</body>
+</html>

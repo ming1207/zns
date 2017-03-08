@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,maximum-scale=1.0,minimum-scale=1.0">
+	<title>Document</title>
+	<style>
+		#box,#box2{
+			width: 100px;
+			height: 100px;
+			background-color: green;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		#box2{
+			background-color: red;
+			left:220px;
+		}
+	</style>
+</head>
+<body>
+<div id="box"></div>	
+<div id="box2"></div>	
+<script>
+	var oBox1 = document.querySelector('#box');
+	var oBox2 = document.querySelector('#box2');
+
+	function setDrag(obj){
+		obj.addEventListener('touchstart',function(ev){
+
+			ev.preventDefault();
+			
+			var clientX = ev.targetTouches[0].clientX;
+			var clientY = ev.targetTouches[0].clientY;
+
+			var disX = clientX - obj.offsetLeft;
+			var disY = clientY - obj.offsetTop;
+
+			document.addEventListener('touchmove',fnMove,false)
+			document.addEventListener('touchend',fnEnd,false)
+
+			function fnMove(ev){
+
+				// var [{clientX,clientY}] = ev.targetTouches;
+
+				var clientX = ev.targetTouches[0].clientX;
+				var clientY = ev.targetTouches[0].clientY;
+
+				var deltaX = clientX - disX;
+				var deltaY = clientY - disY;
+
+				obj.style.left = deltaX + 'px';
+				obj.style.top = deltaY + 'px';
+			}
+
+			function fnEnd(){
+				document.removeEventListener('touchmove',fnMove,false)
+				document.removeEventListener('touchend',fnEnd,false)
+
+			}
+		},false)
+	}
+	
+	setDrag(oBox1);
+	setDrag(oBox2);
+
+</script>
+</body>
+</html>

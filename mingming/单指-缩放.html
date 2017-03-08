@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<title>Document</title>
+	<style>
+		body{
+			overflow:hidden;   /* aa 为什么出现滚动条？ */
+			
+		}
+		div{
+			width: 100px;
+			height: 100px;
+			background: green;
+			margin: 100px auto;		
+		}
+	</style>
+</head>
+<body>
+	<div class="box"></div>
+	<script type="text/javascript">
+
+		var oBox = document.querySelector('.box');
+		var {offsetLeft,offsetTop,offsetWidth,offsetHeight}=oBox; //aa
+		var originX=offsetLeft+offsetWidth/2;
+		var originY=offsetTop+offsetHeight/2;
+		var scale=1;
+
+		document.addEventListener('touchstart',function(ev){
+			
+			var startDis=getDis(ev);
+			var oldScale=scale;
+
+			document.addEventListener('touchmove',fnMove,false)
+			document.addEventListener('touchend',fnEnd,false)
+
+			
+			function fnMove(ev){
+			
+				var currentDis=getDis(ev);
+				scale=currentDis/startDis-1+oldScale;
+				oBox.style.transform=`scale(${scale})`;
+				
+			}
+
+
+			function fnEnd(ev){
+				document.removeEventListener('touchmove',fnMove,false)
+				document.removeEventListener('touchend',fnEnd,false)			
+			}
+
+		},false)
+
+		
+		function getDis(ev){
+			var [{clientX,clientY}]=ev.targetTouches;
+			return Math.sqrt(Math.pow(clientX-originX,2)+Math.pow(clientY-originY,2)) ; 
+
+		}
+	</script>
+</body>
+</html>
